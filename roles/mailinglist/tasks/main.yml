@@ -21,8 +21,6 @@
     state: latest
   with_items:
     - mailman
-  #notify:
-  #  - Newlist mailman
 
 - name: Create directories 
   file:
@@ -49,12 +47,8 @@
     marker: '# {mark} ANSIBLE MANAGED BLOCK - {{ item["webdomain"] }}: {{ item["emaildomain"] }}'
     content: |
       add_virtualhost( '{{ item["webdomain"] }}', '{{ item["emaildomain"] }}' )
-#   content: |
-#     add_virtualhost( '{{ mailman_prefix }}.{{ item }}', '{{ mailman_prefix }}.{{ item }}' )
   with_items:
     - "{{ listmaps }}"
-   #- "{{ domain }}"
-   # - "{{ secondarydomains }}"
 
 - name: Add mailman to apache2
   template:
@@ -117,14 +111,6 @@
   args:
     executable: /bin/bash
   ignore_errors: True
-
-  #- name: Initial list must be created to generate virtual-mailman
-  #  meta: flush_handlers
-
-  #- name: Mailman genaliases
-  #  shell: '/var/lib/mailman/bin/genaliases'
-  #  args:
-  #    executable: /bin/bash
 
 - name: Permissions for /var/lib/mailman/data/aliases.db
   file:
