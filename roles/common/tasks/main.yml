@@ -1,20 +1,36 @@
 ---
 
-- name: Concat domains
+- name: Concat all secondary domains
   set_fact:
-    alldomains_not_unique: "{{ [ domain ] | list + secondarydomains | list }}"
+    secondarydomains: "{{ emailmaps | map(attribute='mx') | unique | list }}"
 
-- name: Make domains unique
+- name: Concat all secondary email domains
   set_fact:
-    alldomains: "{{ alldomains_not_unique | unique }}"
+    secondaryemaildomains: "{{ emailmaps | map(attribute='emaildomain') | unique | list }}"
 
-- name: Concat email domain
+- name: Concat all secondary list web domains
   set_fact:
-    allemaildomains_not_unique: "{{ [ emaildomain ] | list + secondaryemaildomains | list }}"
+    secondarylistwebdomains: "{{ listmaps | map(attribute='webdomain') | unique | list }}"
 
-- name: Make email domains unique
+- name: Concat all secondary list email domains
   set_fact:
-    allemaildomains: "{{ allemaildomains_not_unique | unique }}"
+    secondarylistemaildomains: "{{ listmaps | map(attribute='emaildomain') | unique | list }}"
+
+- name: Concat domains unique
+  set_fact:
+    alldomains: "{{ ( [ domain ] + [ mailman_domain ] + secondarydomains + secondarylistwebdomains ) | unique | list }}"
+
+- name: Concat email domains unique
+  set_fact:
+    allemaildomains: "{{ ( [ emaildomain ] + secondaryemaildomains + secondarylistemaildomains ) | unique | list }}"
+
+- name: Concat all email, web, domain maps unique
+  set_fact:
+    allmaps: "{{ ( [ {'emaildomain': emaildomain , 'webdomain': domain , 'mx':  domain  } ] + emailmaps + listmaps ) | unique | list }}"
+
+- name: Get all top level domains
+  set_fact:
+    alltlds: "{{ ( [ tld ] + secondarytlds ) | unique | list }}"
 
 - name: Secondary domains as csv
   set_fact:

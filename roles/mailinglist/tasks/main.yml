@@ -73,8 +73,6 @@
       </VirtualHost>
   with_items:
     - "{{ listmaps }}"
-   #- "{{ domain }}"
-   #- "{{ secondarydomains }}"
 
 - name: Add mailman domains to apache2 - ServerAlias
   blockinfile:

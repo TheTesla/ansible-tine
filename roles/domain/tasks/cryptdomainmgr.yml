@@ -76,6 +76,9 @@
   with_dict: { generator: 'rspamd', signingConfTemplateFile: '/root/cryptdomainmgr/dkim_signing_template.conf', signingConfTemporaryFile: '/etc/rspamd/dkim_signing_new.conf', signingConfDestinationFile: '/etc/rspamd/local.d/dkim_signing.conf' }
 
 
+- debug:
+    msg: "{{ alldomains }}"
+
 - name: Set domain configurations
   ini_file:
     dest: "/root/domains.conf"

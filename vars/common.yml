@@ -13,15 +13,15 @@ listmaps:
   - { emaildomain: "lists.smartrns.net", webdomain: "www.lists.smartrns.net", mx: '{{ domain }}' }
   - { emaildomain: "lists.entroserv.de", webdomain: "www.lists.entroserv.de", mx: '{{ domain }}' }
 
-secondarydomains: "{{ emailmaps | map(attribute='mx') | unique | list }}"
-secondaryemaildomains: "{{ emailmaps | map(attribute='emaildomain') | unique | list }}"
-secondarylistwebdomains: "{{ listmaps | map(attribute='webdomain') | unique | list }}"
-secondarylistemaildomains: "{{ listmaps | map(attribute='emaildomain') | unique | list }}"
+# secondarydomains: "{{ emailmaps | map(attribute='mx') | unique | list }}"
+# secondaryemaildomains: "{{ emailmaps | map(attribute='emaildomain') | unique | list }}"
+# secondarylistwebdomains: "{{ listmaps | map(attribute='webdomain') | unique | list }}"
+ #secondarylistemaildomains: "{{ listmaps | map(attribute='emaildomain') | unique | list }}"
 
-alldomains: "{{ ( [ domain ] + secondarydomains + secondarylistwebdomains ) | unique | list }}"
-allemaildomains: "{{ ( [ emaildomain ] + secondaryemaildomains + secondarylistemaildomains ) | unique | list }}"
-allmaps: "{{ ( [ {'emaildomain': emaildomain , 'webdomain': domain , 'mx':  domain  } ] + emailmaps + listmaps ) | unique | list }}"
-alltlds: "{{ ( [ tld ] + secondarytlds ) | unique | list }}"
+# alldomains: "{{ ( [ domain ] + secondarydomains + secondarylistwebdomains ) | unique | list }}"
+# allemaildomains: "{{ ( [ emaildomain ] + secondaryemaildomains + secondarylistemaildomains ) | unique | list }}"
+# allmaps: "{{ ( [ {'emaildomain': emaildomain , 'webdomain': domain , 'mx':  domain  } ] + emailmaps + listmaps ) | unique | list }}"
+# alltlds: "{{ ( [ tld ] + secondarytlds ) | unique | list }}"
 
 tlsa: '311,201'
 

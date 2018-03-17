@@ -16,7 +16,7 @@
     - vars/inwx.yml
     - vars/inwxpasswd.yml
   roles:
-    - debugs
+   #- debugs
     - up
     - common
     - database

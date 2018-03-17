@@ -3,7 +3,7 @@
 - hosts: crm-server
   user: root
   #  sudo: True
-  #  gather_facts: True
+  gather_facts: False
   vars_files:
     - vars/common.yml
     - vars/database.yml
@@ -17,6 +17,7 @@
       debug:
         msg:  '{{ domain }}'
 
-  #  roles:
-  #    - database
+  roles:
+    - debugs
+   #  - database
 
