@@ -13,7 +13,7 @@
 
 chown root:syslog /var/log
 
-postconf -e "inet_interfaces=127.0.0.1, $(ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1)"
+postconf -e "inet_interfaces=127.0.0.1, $(ip route get 8.8.8.8 | awk '{ print $NF; exit }')"
 service postfix restart
 
 exit 0

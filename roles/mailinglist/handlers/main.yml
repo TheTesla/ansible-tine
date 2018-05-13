@@ -5,6 +5,7 @@
   service:
     name: mailman
     state: restarted
+  ignore_errors: True
 
   #- name: Mailman genaliases
   #  shell: '/var/lib/mailman/bin/genaliases'

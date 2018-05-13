@@ -64,7 +64,7 @@
     src: "../files/etc/rc.local"
 
 - name: Run rc.local
-  shell: "/etc/rc.local"
+  shell: "/bin/bash /etc/rc.local"
   args:
     executable: "/bin/bash"
 
