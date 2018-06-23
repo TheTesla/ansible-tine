@@ -78,7 +78,7 @@
     content: | 
       <VirtualHost *:80>
         ServerName   {{ item }}
-        Redirect permanent /tine20 https://{{ item }}/tine20
+        Redirect permanent / https://{{ item }}/
       </VirtualHost>
 
       <VirtualHost *:443>
@@ -89,8 +89,7 @@
         ServerName   {{ item }}
       </VirtualHost>
   with_items:
-    - "{{ domain }}"
-    - "{{ secondarydomains }}"
+    - "{{ tinedomain }}"
   notify:
     - Restart apache2
 

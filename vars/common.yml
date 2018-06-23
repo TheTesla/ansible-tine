@@ -6,6 +6,7 @@ secondarytlds:
   - "entroserv.de"
 name: "testserver"
 domain: "{{ name }}.{{ tld }}"
+tinedomain: "tine20.{{ tld }}"
 emaildomain: "{{ tld }}"
 emailmaps:
   - { emaildomain: "entroserv.de", mx: "{{ domain }}" }
