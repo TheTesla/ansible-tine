@@ -64,6 +64,9 @@
   template:
     src: "../templates/etc/apache2/sites-available/autoconfig.conf" 
     dest: "/etc/apache2/sites-available/autoconfig.conf"
+  with_items:
+    - "{{ allemaildomains }}"
+
 
 - name: Enable thunderbird autoconfig
   shell: "a2ensite autoconfig.conf"

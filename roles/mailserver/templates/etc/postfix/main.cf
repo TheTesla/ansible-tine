@@ -8,7 +8,7 @@
 
 # network
 mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
-inet_interfaces = 127.0.0.1, {{ myip }}
+inet_interfaces = 127.0.0.1, {{ myextip }}
 inet_protocols = all
 myhostname = {{ hostname }}
 

@@ -5,6 +5,8 @@
     name: "{{ deliver_user_name }}"
     comment: user for mailserver
 
+- include: autoconfig.yml
+
 - include: rspamd.yml
 
 - include: postfix.yml
@@ -29,5 +31,4 @@
 
   #- include: razor.yml
 
-- include: autoconfig.yml
 

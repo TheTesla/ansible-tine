@@ -16,7 +16,5 @@ listmaps:
 
 tlsa: '311,201'
 
-public_interface: "eth0"
-myip: "{{ ansible_default_ipv4.address }}"  
 
 
