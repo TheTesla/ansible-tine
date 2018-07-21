@@ -72,8 +72,6 @@
   shell: "a2ensite autoconfig.conf"
   args:
     executable: "/bin/bash"
-  notify:
-    - Restart postfix
 
 
 

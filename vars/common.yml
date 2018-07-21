@@ -1,18 +1,24 @@
 ---
 
 hostname: "test"
-tld: "smartrns.net"
-secondarytlds:
-  - "entroserv.de"
-name: "testserver"
+#tld: "smartrns.net"
+tld: "fzs-wiki.de"
+secondarytlds: []
+ #- "entroserv.de"
+
+#name: "testserver"
+name: "crypt"
 domain: "{{ name }}.{{ tld }}"
+#tinedomain: "tine20.{{ tld }}"
 tinedomain: "tine20.{{ tld }}"
 emaildomain: "{{ tld }}"
-emailmaps:
-  - { emaildomain: "entroserv.de", mx: "{{ domain }}" }
+emailmaps: []
+    # - { emaildomain: "entroserv.de", mx: "{{ domain }}" }
+    #
 listmaps:
-  - { emaildomain: "lists.smartrns.net", webdomain: "www.lists.smartrns.net", mx: '{{ domain }}' }
-  - { emaildomain: "lists.entroserv.de", webdomain: "www.lists.entroserv.de", mx: '{{ domain }}' }
+  - { emaildomain: "{{ tld }}", webdomain: "lists.{{ tld }}", mx: '{{ domain }}' }
+    #- { emaildomain: "lists.smartrns.net", webdomain: "www.lists.smartrns.net", mx: '{{ domain }}' }
+    #- { emaildomain: "lists.entroserv.de", webdomain: "www.lists.entroserv.de", mx: '{{ domain }}' }
 
 tlsa: '311,201'
 
