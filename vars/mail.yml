@@ -7,5 +7,5 @@ relay_domains: "{{ mailman_domain }}"
 #opendkim_keyname: "key1"
 
 
-mailname: "{{ name }}" #  "{{ domain }}"
+mailname: "{{ servername }}" #  "{{ domain }}"
 

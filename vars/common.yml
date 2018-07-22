@@ -7,8 +7,8 @@ secondarytlds: []
  #- "entroserv.de"
 
 #name: "testserver"
-name: "crypt"
-domain: "{{ name }}.{{ tld }}"
+servername: "crypt"
+domain: "{{ servername }}.{{ tld }}"
 #tinedomain: "tine20.{{ tld }}"
 tinedomain: "tine20.{{ tld }}"
 emaildomain: "{{ tld }}"
