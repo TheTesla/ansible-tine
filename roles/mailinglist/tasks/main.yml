@@ -41,43 +41,10 @@
   notify:
     - Restart mailman
 
-- name: Configure mailman
-  blockinfile:
-    dest: "/etc/mailman/mm_cfg.py"
-    marker: '# {mark} ANSIBLE MANAGED BLOCK - {{ item["webdomain"] }}: {{ item["emaildomain"] }}'
-    content: |
-      add_virtualhost( '{{ item["webdomain"] }}', '{{ item["emaildomain"] }}' )
-  with_items:
-    - "{{ listmaps }}"
-
 - name: Add mailman to apache2
   template:
     dest: "/etc/apache2/sites-available/mailman.conf"
     src: "../templates/etc/apache2/sites-available/mailman.conf"
-
-- name: Add mailman domains to apache2
-  blockinfile:
-    dest: "/etc/apache2/sites-available/mailman.conf"
-    insertbefore: "^# Ansible block position"
-    marker: '# {mark} ANSIBLE MANAGED BLOCK - {{ item["webdomain"] }}: {{ item["emaildomain"] }}'
-    content: |
-      <VirtualHost *:80>
-          ServerName {{ item["webdomain"] }}
-          Redirect / https://{{ item["webdomain"] }}/
-      </VirtualHost>
-  with_items:
-    - "{{ listmaps }}"
-
-- name: Add mailman domains to apache2 - ServerAlias
-  blockinfile:
-    dest: "/etc/apache2/sites-available/mailman.conf"
-    insertafter: "^# ServerAliases"
-    marker: '# {mark} ANSIBLE MANAGED BLOCK - Aliases {{ item["webdomain"] }}'
-    content: |
-      ServerAlias {{ item["webdomain"] }} {{ mailman_prefix }}.{{ domain }} 
-  with_items:
-    - "{{ listmaps }}"
-
 
 - name: Activate cgid in apache2
   apache2_module:

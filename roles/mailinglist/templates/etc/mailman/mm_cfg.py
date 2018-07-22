@@ -73,6 +73,11 @@ VIRTUAL_MAILMAN_LOCAL_DOMAIN = 'localhost'
 # Required when setting any of its arguments.
 add_virtualhost(DEFAULT_URL_HOST, DEFAULT_EMAIL_HOST)
 
+# Additional virtualhosts from Ansible template
+{% for item in listmaps %}
+add_virtualhost( '{{ item["webdomain"] }}', '{{ item["emaildomain"] }}' )
+{% endfor %}
+
 #-------------------------------------------------------------
 # The default language for this server.
 DEFAULT_SERVER_LANGUAGE = 'en'
