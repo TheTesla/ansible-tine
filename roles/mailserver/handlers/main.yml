@@ -3,15 +3,6 @@
 - include: rspamd.yml
   static: yes
 
-- include: spamassassin.yml
-  static: yes 
-
-- include: amavis.yml
-  static: yes 
-
-- include: opendkim.yml
-  static: yes
-
 - include: postfix.yml
   static: yes 
 
