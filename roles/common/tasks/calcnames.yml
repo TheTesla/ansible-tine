@@ -1,5 +1,17 @@
 ---
 
+- name: Default empty list for secondarytlds
+  set_fact:
+    secondarytlds: "{{ secondarytlds | default([]) }}"
+
+- name: Default empty list for emailmaps
+  set_fact:
+    emailmaps: "{{ emailmaps | default([]) }}"
+
+- name: Default empty list for listmaps
+  set_fact:
+    listmaps: "{{ listmaps | default([]) }}"
+
 - name: Concat all secondary domains
   set_fact:
     secondarydomains: "{{ emailmaps | map(attribute='mx') | unique | list }}"
@@ -27,6 +39,10 @@
 - name: Concat all email, web, domain maps unique
   set_fact:
     allmaps: "{{ ( [ {'emaildomain': emaildomain , 'webdomain': domain , 'mx':  domain  } ] + emailmaps + listmaps ) | unique | list }}"
+
+- name: Concat all email maps
+  set_fact:
+    allemailmaps: "{{ ( [ {'emaildomain': emaildomain , 'mx':  domain  } ] + emailmaps ) | unique | list }}"
 
 - name: Get all top level domains
   set_fact:
