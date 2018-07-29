@@ -1,19 +1,5 @@
 ---
 
-- name: Get files on remote machine
-  find:
-    paths: /etc/dovecot
-    recurse: True
-  register: my_find
-
-- name: Extract filename
-  set_fact: 
-    my_find: "{{ my_find.files|map(attribute='path')|unique|list }}"
-
-- debug:
-    msg: "{{ my_find | difference(['/etc/dovecot/dovecot-sql.conf']) }}"
- 
-
 - include: calcnames.yml
 
 - name: Get IPv4
@@ -30,6 +16,7 @@
   uri:
     url: "http://ipv6.icanhazip.com"
     return_content: yes
+    timeout: 5
   register: get_ipv6_res
   ignore_errors: True
   
@@ -48,12 +35,6 @@
 
 - name: Set hostname immediately, reloads also FQDN from /etc/hosts
   shell: "hostname -F /etc/hostname"
-
-  #  notify: 
-  #    - Hostname
-  #    - Reboot
-
- #- meta: flush_handlers
 
 - name: Force ipv4 for apt
   copy:

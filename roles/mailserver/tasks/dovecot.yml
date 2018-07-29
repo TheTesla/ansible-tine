@@ -7,6 +7,10 @@
     value: false
     vtype: boolean
 
+- name: Add newest dovecot repo to support imap_sieve
+  apt_repository:
+    repo: "ppa:pdoes/dovecot"
+
 - name: Install dovecot and components
   apt:
     name: "{{ item }}"
@@ -19,9 +23,7 @@
     - dovecot-pop3d
     - dovecot-sieve
     - dovecot-managesieved
-    - dovecot-antispam
-  notify:
-    - clear dovecot
+      #    - dovecot-antispam
 
 - name: Copy dovecot SQL file
   copy:
@@ -33,21 +35,18 @@
     name: dovecot
     state: present
     login_password: '{{ mysql_root_passwd }}'
-  notify:
-    - Init dovecot db
+
+- name: Init dovecot db
+  mysql_db:
+    name: dovecot
+    state: import
+    target: /tmp/dovecot.sql
+    login_user: root
+    login_password: '{{ mysql_root_passwd }}'
+  ignore_errors: True
 
 - meta: flush_handlers
 
-- name: Recreate directory /etc/dovecot/conf.d/
-  file:
-    name: "{{ item }}"
-    mode: 0755
-    owner: root
-    group: root
-    state: directory
-  with_items:
-    - /etc/dovecot
-    - /etc/dovecot/conf.d
 
 - name: Set /var/mail deliver user (contains all mailboxes)
   file:
@@ -64,57 +63,17 @@
   vars:
     root: /etc/dovecot
 
-  #- name: Process templates
-  #  template:
-  #    src: "{{ item.src }}"
-  #    dest: "/etc/dovecot/{{ item.path }}"
-  #  with_filetree: "../templates/etc/dovecot/"
-  #  when: item.state == 'file'
-  #  notify:
-  #    - Restart dovecot
-  #  register: managed
-  #
-  #- debug:
-  #    msg: "{{ managed }}"
-  #
-  #- name: List all files manganed by ansible
-  #  set_fact:
-  #    managedfiles: "{{ managed.results|rejectattr('dest','undefined')|map(attribute='dest')|default([])|unique|list }}"
-  #
-  #- debug:
-  #    msg: "{{ managedfiles }}"
-  #
-  #- name: Get files on remote machine
-  #  find:
-  #    paths: /etc/dovecot
-  #    recurse: True
-  #  register: myfind
-  #
-  #- name: Extract filename
-  #  set_fact: 
-  #    myfind: "{{ myfind.files|map(attribute='path')|unique|list }}"
-  #
-  #- name: Subtract filelist
-  #  set_fact:  
-  #    filestodelete: "{{ myfind | difference(managedfiles) }}"
-  #
-  #- name: Remove unmanaged /etc/dovecot
-  #  file:
-  #    name: "{{ item }}"
-  #    state: "absent"
-  #  with_items: "{{ filestodelete }}"
-
-- name: Add secondary domain certificates to dovecot
-  blockinfile:
-    path: /etc/dovecot/conf.d/95-mailstack.conf
-    block: | 
-      local_name {{ item }} {% raw -%}{{%- endraw %}  
-        ssl_cert = < {{ certbaselocation }}{% raw -%}/{%- endraw %}{{ item }}/fullchain.pem
-        ssl_key = < {{ certbaselocation }}{% raw -%}/{%- endraw %}{{ item }}/privkey.pem
-       {% raw -%}}{%- endraw %}
-    marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item }}"
-  when: item != ""
-  with_items: "{{ secondarydomains | default([]) }}"
+  #- name: Add secondary domain certificates to dovecot
+  #  blockinfile:
+  #    path: /etc/dovecot/conf.d/95-mailstack.conf
+  #    block: | 
+  #      local_name {{ item }} {% raw -%}{{%- endraw %}  
+  #        ssl_cert = < {{ certbaselocation }}{% raw -%}/{%- endraw %}{{ item }}/fullchain.pem
+  #        ssl_key = < {{ certbaselocation }}{% raw -%}/{%- endraw %}{{ item }}/privkey.pem
+  #       {% raw -%}}{%- endraw %}
+  #    marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item }}"
+  #  when: item != ""
+  #  with_items: "{{ secondarydomains | default([]) }}"
 
 - name: Set permissions of conf files containing password
   file:
@@ -125,5 +84,10 @@
   with_items:
     - /etc/dovecot/dovecot-sql.conf
     - /etc/dovecot/dovecot-dict-sql.conf
+
+- name: Restart dovecot
+  service:
+    name: dovecot
+    state: restarted
 
 

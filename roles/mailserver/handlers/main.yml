@@ -1,8 +1,5 @@
 ---
 
-- include: rspamd.yml
-  static: yes
-
 - include: postfix.yml
   static: yes 
 

@@ -23,16 +23,6 @@
   with_items:
     - rspamd
     - redis-server
-  notify:
-    - delete rspamd config
-
-- name: Run handler to initially delete rspamd config     
-  meta: flush_handlers
-
-  #- name: Stop rspamd
-  #  systemd:
-  #    name: rspamd
-  #    state: stopped
 
 - name: Create rspamd password hash
   shell: "rspamadm pw -p {{ rspamd_pw }}"
@@ -46,18 +36,10 @@
   set_fact:
     rspamd_pw_hash: "{{ rspamd_pw_result.stdout }}"
 
-- name: Recreate /etc/rspamd/local.d/
-  file:
-    dest: "/etc/rspamd/local.d/"
-    state: directory
-    recurse: True
-
-- name: Templates for rspamd
-  template:
-    dest: "/etc/rspamd/{{ item.path }}"
-    src: "{{ item.src }}"
-  with_filetree: "../templates/etc/rspamd" 
-  when: item.state == 'file'
+- name: Process rspamd templates using /etc/rspamd exclusively
+  include_tasks: ../../common/tasks/exclusivetemplate.yml
+  vars:
+    root: /etc/rspamd/local.d
 
 - name: Create directory for dkim key
   file:

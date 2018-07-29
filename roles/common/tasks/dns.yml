@@ -19,20 +19,10 @@
     src: "../files/etc/dhcp/"
     dest: "/etc/dhcp/"
 
-  #- name: Process /etc/hosts template
-  #  template:
-  #    src: "../templates/etc/hosts"
-  #    dest: "/etc/hosts"
-  #  notify:
-  #    - Hostname
-
 - name: set /etc/unbound owner
   file:
     name: /etc/unbound
     owner: unbound
-  #  notify:
-  #    - Restart unbound
-  #    - Unbound anchor
 
 - name: Unbound anchor
   shell: "/usr/sbin/unbound-anchor ; echo $?"

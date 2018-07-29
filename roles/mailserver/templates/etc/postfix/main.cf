@@ -14,7 +14,7 @@ myhostname = {{ domain }}
 
 #smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
 smtpd_banner = {{ domain }} ESMTP $mail_name (Ubuntu)
-mydestination = $myhostname, $myhostname.localdomain, localhost, localhost.localdomain
+mydestination = $myhostname.localdomain, localhost, localhost.localdomain
 
 # mailqueue configuraion
 maximal_queue_lifetime = 1h

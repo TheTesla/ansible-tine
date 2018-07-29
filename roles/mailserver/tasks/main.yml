@@ -23,12 +23,4 @@
     login_password: '{{ mysql_root_passwd }}'
 
 
-  #- include: amavis.yml
-
-  #- include: spamassassin.yml
-
-  #- include: opendkim.yml
-
-  #- include: razor.yml
-
 
