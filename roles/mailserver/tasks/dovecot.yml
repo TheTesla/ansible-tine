@@ -59,14 +59,50 @@
   with_items:
     - "/var/mail"
 
-- name: Process dovecot templates
-  template:
-    src: "{{ item.src }}"
-    dest: "/etc/dovecot/{{ item.path }}"
-  with_filetree: "../templates/etc/dovecot/"
-  when: item.state == 'file'
-  notify:
-    - Restart dovecot
+- name: Process dovecot templates using /etc/dovecot exclusively
+  include_tasks: ../../common/tasks/exclusivetemplate.yml
+  vars:
+    root: /etc/dovecot
+
+  #- name: Process templates
+  #  template:
+  #    src: "{{ item.src }}"
+  #    dest: "/etc/dovecot/{{ item.path }}"
+  #  with_filetree: "../templates/etc/dovecot/"
+  #  when: item.state == 'file'
+  #  notify:
+  #    - Restart dovecot
+  #  register: managed
+  #
+  #- debug:
+  #    msg: "{{ managed }}"
+  #
+  #- name: List all files manganed by ansible
+  #  set_fact:
+  #    managedfiles: "{{ managed.results|rejectattr('dest','undefined')|map(attribute='dest')|default([])|unique|list }}"
+  #
+  #- debug:
+  #    msg: "{{ managedfiles }}"
+  #
+  #- name: Get files on remote machine
+  #  find:
+  #    paths: /etc/dovecot
+  #    recurse: True
+  #  register: myfind
+  #
+  #- name: Extract filename
+  #  set_fact: 
+  #    myfind: "{{ myfind.files|map(attribute='path')|unique|list }}"
+  #
+  #- name: Subtract filelist
+  #  set_fact:  
+  #    filestodelete: "{{ myfind | difference(managedfiles) }}"
+  #
+  #- name: Remove unmanaged /etc/dovecot
+  #  file:
+  #    name: "{{ item }}"
+  #    state: "absent"
+  #  with_items: "{{ filestodelete }}"
 
 - name: Add secondary domain certificates to dovecot
   blockinfile:

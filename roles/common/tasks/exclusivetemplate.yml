@@ -1,0 +1,15 @@
+---
+
+- name: Process templates
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ root }}/{{ item.path }}"
+  with_filetree: "../templates/{{ root }}/"
+  when: item.state == 'file'
+  register: managed
+
+- include_tasks: removeexclude.yml
+  #  vars:
+  #    root: "{{ root }}"
+  #    managed: "{{ managed }}"
+

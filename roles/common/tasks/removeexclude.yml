@@ -1,0 +1,26 @@
+---
+
+- name: List all files managed by ansible
+  set_fact:
+    managedfiles: "{{ managed.results|rejectattr('dest','undefined')|map(attribute='dest')|default([])|unique|list }}"
+
+- name: Get files on remote machine
+  find:
+    paths: "{{ root }}"
+    recurse: True
+  register: finds
+
+- name: Extract filename
+  set_fact: 
+    finds: "{{ finds.files|map(attribute='path')|unique|list }}"
+
+- name: Subtract filelist
+  set_fact:  
+    filestodelete: "{{ finds|difference(managedfiles) }}"
+
+- name: Remove unmanaged files
+  file:
+    name: "{{ item }}"
+    state: "absent"
+  with_items: "{{ filestodelete }}"
+
