@@ -74,8 +74,9 @@
 - name: TLS required
   blockinfile:
     path: /etc/tine20/apache.conf
-    marker: "# {mark} Ansible crm/tine https config for {{ item }}"
+    marker: "# {mark} Ansible crm/tine https config"
     content: | 
+      {% for item in tinedomains %}
       <VirtualHost *:80>
         ServerName   {{ item }}
         Redirect permanent / https://{{ item }}/
@@ -88,8 +89,7 @@
         DocumentRoot /usr/share/tine20
         ServerName   {{ item }}
       </VirtualHost>
-  with_items:
-    - "{{ tinedomain }}"
+      {% endfor %}
   notify:
     - Restart apache2
 

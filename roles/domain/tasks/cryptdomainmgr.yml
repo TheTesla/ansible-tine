@@ -86,7 +86,7 @@
     option: "{{ item[0].key }}"
     value: "{{ item[0].value }}"
   with_nested:
-    - [{key: 'ip4', value: 'auto'}, {key: 'ip6', value: 'auto'}, {key: 'tlsa', value: '{{ tlsa }}'}, {key: 'certificate', value: 'maincert'}]
+    - [{key: 'ip4', value: 'auto'}, {key: 'ip6', value: 'auto'}, {key: 'tlsa', value: '{{ tlsa }}'}, {key: 'certificate', value: 'maincert'}, {key: 'caa', value: '0 issue letsencrypt.org'}]
     - "{{ alldomains }}"
     
 - name: Set domain configurations for email autoconfig
@@ -96,7 +96,7 @@
     option: "{{ item[0].key }}"
     value: "{{ item[0].value }}"
   with_nested:
-    - [{key: 'ip4', value: 'auto'}, {key: 'ip6', value: 'auto'}, {key: 'tlsa', value: '{{ tlsa }}'}, {key: 'certificate', value: 'maincert'}]
+    - [{key: 'ip4', value: 'auto'}, {key: 'ip6', value: 'auto'}, {key: 'tlsa', value: '{{ tlsa }}'}, {key: 'certificate', value: 'maincert'}, {key: 'caa', value: '0 issue letsencrypt.org'}]
     - "{{ allemaildomains }}"
 
 - name: Set toplevel domain configurations - soa

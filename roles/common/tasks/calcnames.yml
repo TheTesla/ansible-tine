@@ -30,7 +30,7 @@
 
 - name: Concat domains unique
   set_fact:
-    alldomains: "{{ ( [ domain ] + [ tinedomain ] + [ mailman_domain ] + secondarydomains + secondarylistwebdomains ) | unique | list }}"
+    alldomains: "{{ ( [ domain ] + rspamddomains + tinedomains + secondarydomains + secondarylistwebdomains ) | unique | list }}"
 
 - name: Concat email domains unique
   set_fact:

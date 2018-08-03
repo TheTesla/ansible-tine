@@ -1,8 +1,6 @@
 ---
 
 - include: postfix.yml
-  static: yes 
 
 - include: dovecot.yml
-  static: yes 
 

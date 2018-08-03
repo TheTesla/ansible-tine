@@ -23,7 +23,6 @@
     - dovecot-pop3d
     - dovecot-sieve
     - dovecot-managesieved
-      #    - dovecot-antispam
 
 - name: Copy dovecot SQL file
   copy:
@@ -62,18 +61,6 @@
   include_tasks: ../../common/tasks/exclusivetemplate.yml
   vars:
     root: /etc/dovecot
-
-  #- name: Add secondary domain certificates to dovecot
-  #  blockinfile:
-  #    path: /etc/dovecot/conf.d/95-mailstack.conf
-  #    block: | 
-  #      local_name {{ item }} {% raw -%}{{%- endraw %}  
-  #        ssl_cert = < {{ certbaselocation }}{% raw -%}/{%- endraw %}{{ item }}/fullchain.pem
-  #        ssl_key = < {{ certbaselocation }}{% raw -%}/{%- endraw %}{{ item }}/privkey.pem
-  #       {% raw -%}}{%- endraw %}
-  #    marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item }}"
-  #  when: item != ""
-  #  with_items: "{{ secondarydomains | default([]) }}"
 
 - name: Set permissions of conf files containing password
   file:

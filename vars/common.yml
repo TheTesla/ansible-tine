@@ -8,7 +8,10 @@ secondarytlds:
 servername: "testserver"
 #servername: "crypt"
 domain: "{{ servername }}.{{ tld }}"
-tinedomain: "tine20.{{ tld }}"
+tinedomains:
+  - "tine20.{{ tld }}"
+rspamddomains:
+  - "rspamd.{{ tld }}"
 emaildomain: "{{ tld }}"
 emailmaps:
   - { emaildomain: "entroserv.de", mx: "{{ domain }}" }
