@@ -1,5 +1,10 @@
 ---
 
+
+- debug:
+    msg: "\"{{ listmaps| map(attribute='emaildomain')| join('\", \"') }}\""
+
+
 - name: Default empty list for secondarytlds
   set_fact:
     secondarytlds: "{{ secondarytlds | default([]) }}"

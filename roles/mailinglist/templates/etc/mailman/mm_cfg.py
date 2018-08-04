@@ -62,12 +62,12 @@ IMAGE_LOGOS         = '/images/mailman/'
 
 #-------------------------------------------------------------
 # Default domain for email addresses of newly created MLs
-DEFAULT_EMAIL_HOST = '{{ mailman_prefix }}.{{ domain }}'
+DEFAULT_EMAIL_HOST = '{{ defaultlistmap.emaildomain }}'
 #-------------------------------------------------------------
 # Default host for web interface of newly created MLs
-DEFAULT_URL_HOST   = '{{ mailman_prefix }}.{{ domain }}'
+DEFAULT_URL_HOST   = '{{ defaultlistmap.webdomain }}'
 #-------------------------------------------------------------
-POSTFIX_STYLE_VIRTUAL_DOMAINS = [ {{ mailman_domains_pylist }} ]
+POSTFIX_STYLE_VIRTUAL_DOMAINS = [ "{{ ( listmaps + [ defaultlistmap ] ) | map(attribute='emaildomain')| join('\", \"') }}" ]
 VIRTUAL_MAILMAN_LOCAL_DOMAIN = 'localhost'
 
 # Required when setting any of its arguments.
@@ -75,7 +75,7 @@ add_virtualhost(DEFAULT_URL_HOST, DEFAULT_EMAIL_HOST)
 
 # Additional virtualhosts from Ansible template
 {% for item in listmaps %}
-add_virtualhost( '{{ item["webdomain"] }}', '{{ item["emaildomain"] }}' )
+add_virtualhost( '{{ item.webdomain }}', '{{ item.emaildomain }}' )
 {% endfor %}
 
 #-------------------------------------------------------------

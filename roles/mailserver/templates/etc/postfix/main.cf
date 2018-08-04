@@ -173,7 +173,6 @@ alias_database = hash:/etc/aliases
 relayhost =
 
 # for mailman
-#relay_domains = {{ relay_domains }}
 #transport_maps = hash:/etc/postfix/transport
 mailman_destination_recipient_limit = 1
  
