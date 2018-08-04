@@ -1,7 +1,5 @@
 ---
 
-inwxapi: "https://api.domrobot.com/xmlrpc/"
-
 inwxlogin: "entroserv"
 #inwxlogin: "stura-htw-dresden"
 
