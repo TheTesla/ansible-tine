@@ -1,18 +1,18 @@
 ---
 
-- name: Configure postfix mailname
+- name: Configure postfix mailname - dummy
   debconf:
     name: postfix
     question: postfix/mailname
-    value: "{{ mailname }}"
+    value: "dummy"
     vtype: string
 
-- name: Configure postfix main mailer type
+- name: Configure postfix main mailer type - No configuration
   debconf:
     name: postfix
     question: postfix/main_mailer_type
-    value: "Internet Site"
-    vtype: string
+    value: "No configuration"
+    vtype: select
 
 - name: Install postfix
   apt:

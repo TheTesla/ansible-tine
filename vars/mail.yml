@@ -3,5 +3,4 @@
 deliver_user_name: "deliver"
 mailserver_db_user_name: "dbuser"
 
-mailname: "{{ servername }}" #  "{{ domain }}"
 
