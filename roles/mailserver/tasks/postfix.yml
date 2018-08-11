@@ -89,6 +89,11 @@
   args:
     executable: "/bin/bash"
 
+- name: Postmap virtual mailman domains
+  shell: "postmap /etc/postfix/virtual_mailman_domains"
+  args:
+    executable: "/bin/bash"
+
 - name: Newaliases needed
   shell: "newaliases"
   args:

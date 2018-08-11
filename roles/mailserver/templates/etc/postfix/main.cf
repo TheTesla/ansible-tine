@@ -109,10 +109,11 @@ postscreen_dnsbl_sites = dnsbl.sorbs.net*1, bl.spamcop.net*1, ix.dnsbl.manitu.ne
 postscreen_dnsbl_action = drop
 
 # database queries
-virtual_mailbox_domains = mysql:/etc/postfix/sql/sql-virtual_mailbox_domains.cf
-virtual_mailbox_maps = mysql:/etc/postfix/sql/sql-virtual_mailbox_maps.cf
-virtual_alias_maps =	mysql:/etc/postfix/sql/sql-virtual_alias_maps_aliases.cf,
-		        hash:/var/lib/mailman/data/virtual-mailman
+virtual_mailbox_domains = mysql:/etc/postfix/sql/sql-virtual_mailbox_domains.cf,
+                          hash:/etc/postfix/virtual_mailman_domains
+virtual_mailbox_maps =    mysql:/etc/postfix/sql/sql-virtual_mailbox_maps.cf
+virtual_alias_maps =	  mysql:/etc/postfix/sql/sql-virtual_alias_maps_aliases.cf,
+		          hash:/var/lib/mailman/data/virtual-mailman
 
 local_recipient_maps = $virtual_mailbox_maps
 
