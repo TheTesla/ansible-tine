@@ -16,7 +16,6 @@ emaildomain: "{{ tld }}"
 emailmaps:
   - { emaildomain: "entroserv.de", mx: "{{ domain }}" }
 
-autoconfigdomains: "{{ ( emailmaps|map(attribute='emaildomain')|list + [ emaildomain ] ) | unique }}"
   
 
 defaultlistmap: { emaildomain: "lists.smartrns.net", webdomain: "www.lists.smartrns.net", mx: '{{ domain }}' } 

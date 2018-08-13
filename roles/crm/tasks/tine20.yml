@@ -20,9 +20,17 @@
 
 - name: Get tine20
   apt:
-    name: tine20
+    name: "{{ item }}"
     state: latest
     force: yes
+  with_items:
+    - tine20
+    - tine20-voipmanager
+    - tine20-events
+    - tine20-courses
+    - tine20-phone
+    - tine20-projects
+    - tine20-worker
 
 - name: Enable https
   apache2_module:
@@ -46,13 +54,45 @@
 
 - name: Install tine20
   shell: |
-   php /usr/share/tine20/setup.php -c /etc/tine20 --install -- adminLoginName={{ tine20_admin_name }} adminPassword={{ tine20_admin_passwd }} acceptedTermsVersion=1000 adminEmailAddress={{ tine20_admin_name }}@{{ emaildomain }} imap=host:{{ tine20_mailhost }},port:143,useSystemAccount:1,domain:{{ domain }},ssl:none,useEmailAsUsername:0,backend:dovecot_imap,dovecot_host:{{ dbhost }},dovecot_dbname:dovecot,dovecot_username:{{ mailserver_db_user_name }},dovecot_password:{{ mailserver_db_user_passwd }},dovecot_uid:{{ deliver_user_name }},dovecot_gid:{{ deliver_user_name }},dovecot_home:/var/spool/mail/%d/%n,dovecot_scheme:SSHA512 smtp='{"active":true,"backend":"postfix","hostname":"{{ tine20_mailhost }}","port":25,"ssl":"none","auth":"none","primarydomain":"{{ domain }}","secondarydomains":"{{ email_domains_csv }}","username":"tine20@{{ domain }}","password":"tine20","from":"tine20@{{ domain }}","postfix":{"host":"{{ dbhost }}","dbname":"postfix","username":"{{ mailserver_db_user_name }}","password":"{{ mailserver_db_user_passwd }}"} }' sieve=hostname:{{ tine20_mailhost }},port:4190,ssl:none
+   php /usr/share/tine20/setup.php -c /etc/tine20 --install -- adminLoginName={{ tine20_admin_name }} adminPassword={{ tine20_admin_passwd }} acceptedTermsVersion=1000 adminEmailAddress={{ tine20_admin_name }}@{{ emaildomain }} imap=host:{{ tine20_mailhost }},port:143,useSystemAccount:1,domain:{{ domain }},ssl:none,useEmailAsUsername:0,backend:dovecot_imap,dovecot_host:{{ dbhost }},dovecot_dbname:dovecot,dovecot_username:{{ mailserver_db_user_name }},dovecot_password:{{ mailserver_db_user_passwd }},dovecot_uid:{{ deliver_user_name }},dovecot_gid:{{ deliver_user_name }},dovecot_home:/var/spool/mail/%d/%n,dovecot_scheme:SSHA512 smtp='{"active":true,"backend":"postfix","hostname":"{{ tine20_mailhost }}","port":25,"ssl":"none","auth":"none","primarydomain":"{{ domain }}","secondarydomains":"{{ allemaildomains | join(',') }}","username":"tine20@{{ domain }}","password":"tine20","from":"tine20@{{ domain }}","postfix":{"host":"{{ dbhost }}","dbname":"postfix","username":"{{ mailserver_db_user_name }}","password":"{{ mailserver_db_user_passwd }}"} }' sieve=hostname:{{ tine20_mailhost }},port:4190,ssl:none
   args:
     executable: "/bin/bash"
   become: True
   become_user: "www-data"
   notify:
     - Restart apache2
+
+- name: Set sieve Configuration of tine20 again
+  shell: |
+   php /usr/share/tine20/setup.php -c /etc/tine20 --setconfig configkey='sieve' configvalue='hostname:{{ tine20_mailhost }},port:4190,ssl:none'
+  args:
+    executable: "/bin/bash"
+  become: True
+  become_user: "www-data"
+  notify:
+    - Restart apache2
+
+- name: Set smtp Configuration of tine20 again
+  shell: |
+      php /usr/share/tine20/setup.php -c /etc/tine20 --setconfig configkey='smtp' configvalue='{"active":true,"backend":"postfix","hostname":"{{ tine20_mailhost }}","port":25,"ssl":"none","auth":"none","primarydomain":"{{ domain }}","secondarydomains":"{{ allemaildomains | join(',') }}","username":"tine20@{{ domain }}","password":"tine20","from":"tine20@{{ domain }}","postfix":{"host":"{{ dbhost }}","dbname":"postfix","username":"{{ mailserver_db_user_name }}","password":"{{ mailserver_db_user_passwd }}"} }'
+  args:
+    executable: "/bin/bash"
+  become: True
+  become_user: "www-data"
+  notify:
+    - Restart apache2
+
+- name: Set imap Configuration of tine20 again
+  shell: |
+      php /usr/share/tine20/setup.php -c /etc/tine20 --setconfig configkey='imap' configvalue='host:{{ tine20_mailhost }},port:143,useSystemAccount:1,domain:{{ domain }},ssl:none,useEmailAsUsername:0,backend:dovecot_imap,dovecot_host:{{ dbhost }},dovecot_dbname:dovecot,dovecot_username:{{ mailserver_db_user_name }},dovecot_password:{{ mailserver_db_user_passwd }},dovecot_uid:{{ deliver_user_name }},dovecot_gid:{{ deliver_user_name }},dovecot_home:/var/spool/mail/%d/%n,dovecot_scheme:SSHA512'
+  args:
+    executable: "/bin/bash"
+  become: True
+  become_user: "www-data"
+  notify:
+    - Restart apache2
+
+
 
 - name: Update tine20
   shell: 'php /usr/share/tine20/setup.php -c /etc/tine20 --update'

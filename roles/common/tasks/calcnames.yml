@@ -1,62 +1,62 @@
 ---
 
 
-- debug:
-    msg: "{{ emailmaps|map(attribute='emaildomain')|list + [ emaildomain ] }}"
-    #msg: "\"{{ listmaps| map(attribute='emaildomain')| join('\", \"') }}\""
-
-
-
+# process tlds
 - name: Default empty list for secondarytlds
   set_fact:
     secondarytlds: "{{ secondarytlds | default([]) }}"
-
-- name: Default empty list for emailmaps
-  set_fact:
-    emailmaps: "{{ emailmaps | default([]) }}"
-
-- name: Default empty list for listmaps
-  set_fact:
-    listmaps: "{{ listmaps | default([]) }}"
-
-- name: Concat all secondary domains
-  set_fact:
-    secondarydomains: "{{ emailmaps | map(attribute='mx') | unique | list }}"
-
-- name: Concat all secondary email domains
-  set_fact:
-    secondaryemaildomains: "{{ emailmaps | map(attribute='emaildomain') | unique | list }}"
-
-- name: Concat all secondary list web domains
-  set_fact:
-    secondarylistwebdomains: "{{ listmaps | map(attribute='webdomain') | unique | list }}"
-
-- name: Concat all secondary list email domains
-  set_fact:
-    secondarylistemaildomains: "{{ listmaps | map(attribute='emaildomain') | unique | list }}"
-
-- name: Concat domains unique
-  set_fact:
-    alldomains: "{{ ( [ domain ] + rspamddomains + tinedomains + secondarydomains + secondarylistwebdomains ) | unique | list }}"
-
-- name: Concat email domains unique
-  set_fact:
-    allemaildomains: "{{ ( [ emaildomain ] + secondaryemaildomains + secondarylistemaildomains ) | unique | list }}"
-
-- name: Concat all email, web, domain maps unique
-  set_fact:
-    allmaps: "{{ ( [ {'emaildomain': emaildomain , 'webdomain': domain , 'mx':  domain  } ] + emailmaps + listmaps ) | unique | list }}"
-
-- name: Concat all email maps
-  set_fact:
-    allemailmaps: "{{ ( [ {'emaildomain': emaildomain , 'mx':  domain  } ] + emailmaps ) | unique | list }}"
 
 - name: Get all top level domains
   set_fact:
     alltlds: "{{ ( [ tld ] + secondarytlds ) | unique | list }}"
 
-- name: All email domains as csv
+# process email
+- name: Default empty list for emailmaps
   set_fact:
-    email_domains_csv: "{{ allemaildomains | join(',') }}" 
- 
+    emailmaps: "{{ emailmaps | default([]) }}"
+
+- name: Concat all email maps
+  set_fact:
+    allemailmaps: "{{ ( [ {'emaildomain': emaildomain , 'mx':  domain  } ] + emailmaps ) | unique | list }}"
+
+- name: Concat all secondary email domains
+  set_fact:
+    secondaryemaildomains: "{{ emailmaps | map(attribute='emaildomain') | unique | list }}"
+
+- name: Concat email domains unique
+  set_fact:
+    allemaildomains: "{{ ( [ emaildomain ] + secondaryemaildomains ) | unique | list }}"
+
+- name: Concat all secondary domains
+  set_fact:
+    secondarymxdomains: "{{ emailmaps | map(attribute='mx') | unique | list }}"
+
+# process mailinglist
+- name: Default empty list for listmaps
+  set_fact:
+    listmaps: "{{ ( [ defaultlistmap ] + listmaps ) | default([]) }}"
+
+- name: Concat all secondary list web domains
+  set_fact:
+    listwebdomains: "{{ listmaps | map(attribute='webdomain') | unique | list }}"
+
+# process webdomains
+- name: Concat web domains
+  set_fact:
+    allwebdomains: "{{ ( rspamddomains + tinedomains + listwebdomains ) | unique | list }}"
+
+- name: Concat domains unique
+  set_fact:
+    alldomains: "{{ ( [ domain ] + secondarymxdomains + allwebdomains ) | unique | list }}"
+
+# process combined structures
+
+- name: Concat all email, web, domain maps unique
+  set_fact:
+    allmaps: "{{ ( [ {'emaildomain': emaildomain , 'webdomain': domain , 'mx':  domain  } ] + emailmaps + listmaps ) | unique | list }}"
+
+- name: Create autoconfig domains
+  set_fact:
+    autoconfigdomains: "{{ ( allmaps|map(attribute='emaildomain')|list ) | unique | list }}"
+
 
