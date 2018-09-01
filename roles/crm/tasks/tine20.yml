@@ -6,17 +6,17 @@
     state: present
     update_cache: yes
 
-- name: Add tine20 repo
-  apt_repository:
-    repo: "deb https://packages.tine20.org/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} stable"
-    state: present
-    update_cache: yes
-
 - name: apt-key
   apt_key:
     keyserver: keys.gnupg.net
     id: 8825FD82
     state: present
+
+- name: Add tine20 repo
+  apt_repository:
+    repo: "deb https://packages.tine20.org/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} stable"
+    state: present
+    update_cache: yes
 
 - name: Get tine20
   apt:
@@ -24,13 +24,14 @@
     state: latest
     force: yes
   with_items:
+    - apt-utils
     - tine20
-    - tine20-voipmanager
+      #    - tine20-voipmanager
       #- tine20-events
-    - tine20-courses
-    - tine20-phone
-    - tine20-projects
-    - tine20-worker
+      #- tine20-courses
+      #- tine20-phone
+      #- tine20-projects
+      #- tine20-worker
 
 - name: Enable https
   apache2_module:

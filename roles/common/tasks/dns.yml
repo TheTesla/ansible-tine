@@ -24,8 +24,38 @@
     name: /etc/unbound
     owner: unbound
 
+- name: disable systemd-resolved
+  systemd:
+    name: systemd-resolved
+    enabled: no
+    state: stopped
+
+- name: set nameserver
+  copy:
+    dest: /etc/resolv.conf
+    force: yes
+    content: |
+      nameserver 127.0.0.1
+
+- name: set optional network manager config
+  copy:
+    dest: /etc/NetworkManager/NetworkManager.conf
+    force: yes
+    content: |
+      [main]
+      dns=unbound
+  ignore_errors: True
+
+- name: enable unbound-resolvconf
+  systemd:
+    name: unbound-resolvconf
+    enabled: yes
+    state: stopped
+  ignore_errors: True
+
+
 - name: Unbound anchor
-  shell: "/usr/sbin/unbound-anchor ; echo $?"
+  shell: "/usr/sbin/unbound-anchor -a /etc/unbound/root.key ; echo $?"
   args:
     executable: "/bin/bash"
 

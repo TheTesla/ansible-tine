@@ -1,5 +1,15 @@
 ---
 
+- name: Enable apache2 proxy
+  apache2_module:
+    state: present
+    name: "{{ item }}"
+    ignore_configcheck: True
+  with_items:
+    - proxy
+    - proxy_http
+  ignore_errors: True
+
 - name: Process rspamd gui template 
   template:
     src: "../templates/etc/apache2/sites-available/rspamd.conf" 
@@ -10,16 +20,9 @@
   args:
     executable: "/bin/bash"
 
-- name: Enable apache2 proxy
-  apache2_module:
-    state: present
-    name: "{{ item }}"
-  with_items:
-    - proxy
-    - proxy_http
-
 - name: Restart apache2
   systemd:
     name: apache2
     state: restarted
+  ignore_errors: True
 

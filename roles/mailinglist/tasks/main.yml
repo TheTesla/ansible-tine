@@ -38,8 +38,8 @@
     dest: "/etc/mailman/{{ item.path }}"
   with_filetree: "../templates/etc/mailman/"
   when: item.state == 'file'
-  notify:
-    - Restart mailman
+  #  notify:
+  #    - Restart mailman
 
 - name: Add mailman to apache2
   template:
@@ -51,14 +51,14 @@
     state: present
     name: cgid
     ignore_configcheck: true
-  ignore_errors: true
+  #  ignore_errors: true
 
 - name: Activate mailman in apache2
   shell: "a2ensite mailman.conf"
   args:
     executable: "/bin/bash"
-  notify:
-    - Restart apache2
+  #  notify:
+  #    - Restart apache2
 
 - name: Add user postfix to group list
   user:

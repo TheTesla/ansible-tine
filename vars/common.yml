@@ -1,10 +1,11 @@
 ---
 
-hostname: "test23"
-tld: "smartrns.net"
+hostname: "test242"
+tld: "entroserv.de"
+#tld: "smartrns.net"
 #tld: "fzs-wiki.de"
-secondarytlds:
-  - "entroserv.de"
+#secondarytlds:
+#  - "entroserv.de"
 servername: "testserver"
 #servername: "crypt"
 domain: "{{ servername }}.{{ tld }}"
@@ -13,17 +14,19 @@ tinedomains:
 rspamddomains:
   - "rspamd.{{ tld }}"
 emaildomain: "{{ tld }}"
-emailmaps:
-  - { emaildomain: "entroserv.de", mx: "{{ domain }}" }
+#emailmaps:
+    #  - { emaildomain: "entroserv.de", mx: "{{ domain }}" }
+    #  - { emaildomain: "entroserv.de", mx: "{{ domain }}" }
 
   
 
-defaultlistmap: { emaildomain: "lists.smartrns.net", webdomain: "www.lists.smartrns.net", mx: '{{ domain }}' } 
+#defaultlistmap: { emaildomain: "lists.smartrns.net", webdomain: "www.lists.smartrns.net", mx: '{{ domain }}' } 
+defaultlistmap: { emaildomain: "lists.{{ tld }}", webdomain: "www.lists.{{ tld }}", mx: '{{ domain }}' } 
 
-listmaps:
+#listmaps:
     #- { emaildomain: "{{ tld }}", webdomain: "lists.{{ tld }}", mx: '{{ domain }}' }
-  - { emaildomain: "lists.smartrns.net", webdomain: "www.lists.smartrns.net", mx: '{{ domain }}' }
-  - { emaildomain: "lists.entroserv.de", webdomain: "www.lists.entroserv.de", mx: '{{ domain }}' }
+    #  - { emaildomain: "lists.smartrns.net", webdomain: "www.lists.smartrns.net", mx: '{{ domain }}' }
+    #  - { emaildomain: "lists.entroserv.de", webdomain: "www.lists.entroserv.de", mx: '{{ domain }}' }
 
 tlsa: '311,201'
 

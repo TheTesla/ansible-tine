@@ -8,7 +8,7 @@
 
 - name: Get all top level domains
   set_fact:
-    alltlds: "{{ ( [ tld ] + secondarytlds ) | unique | list }}"
+    alltlds: "{{ ( [ tld ] + secondarytlds ) | list | unique }}"
 
 # process email
 - name: Default empty list for emailmaps
@@ -34,7 +34,7 @@
 # process mailinglist
 - name: Default empty list for listmaps
   set_fact:
-    listmaps: "{{ ( [ defaultlistmap ] + listmaps ) | default([]) }}"
+    listmaps: "{{ [ defaultlistmap ] + ( listmaps | default([]) ) }}"
 
 - name: Concat all secondary list web domains
   set_fact:

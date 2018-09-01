@@ -7,9 +7,9 @@
     value: false
     vtype: boolean
 
-- name: Add newest dovecot repo to support imap_sieve
-  apt_repository:
-    repo: "ppa:pdoes/dovecot"
+  #- name: Add newest dovecot repo to support imap_sieve
+  #  apt_repository:
+  #    repo: "ppa:pdoes/dovecot"
 
 - name: Install dovecot and components
   apt:
@@ -76,5 +76,6 @@
   service:
     name: dovecot
     state: restarted
+  ignore_errors: True
 
 

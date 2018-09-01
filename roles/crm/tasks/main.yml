@@ -2,3 +2,17 @@
 
 - include: tine20.yml
 
+- name: Restart all services
+  systemd:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+    - unbound
+    - redis
+    - mysql
+    - apache2
+    - postfix
+    - dovecot
+    - rspamd
+    - mailman
+

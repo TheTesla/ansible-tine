@@ -57,8 +57,8 @@
     dest: "/etc/postfix/{{ item.path }}"
   with_filetree: "../templates/etc/postfix"
   when: item.state == 'file'
-  notify:
-    - Restart postfix
+  #  notify:
+  #    - Restart postfix
 
 - name: Process /etc/aliases template
   template:
