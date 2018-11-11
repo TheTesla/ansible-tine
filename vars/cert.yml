@@ -2,7 +2,8 @@
 
 certemail: "stefan.helmert@t-online.de"
 
-certextra: "--hsts, --break-my-certs, --staging, --expand"
+#certextra: "--hsts, --break-my-certs, --staging, --expand"
+certextra: "--staging, -x"
 #certextra: "--hsts, --force-renewal"
 
 certbaselocation: "/etc/ssl"

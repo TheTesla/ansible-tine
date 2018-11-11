@@ -28,7 +28,7 @@ defaultlistmap: { emaildomain: "lists.{{ tld }}", webdomain: "www.lists.{{ tld }
     #  - { emaildomain: "lists.smartrns.net", webdomain: "www.lists.smartrns.net", mx: '{{ domain }}' }
     #  - { emaildomain: "lists.entroserv.de", webdomain: "www.lists.entroserv.de", mx: '{{ domain }}' }
 
-tlsa: '311,201'
+tlsa: 'auto:3:1:1,auto:2:0:1'
 
 
 
