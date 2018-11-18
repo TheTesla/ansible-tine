@@ -55,7 +55,7 @@
 
 - name: Install tine20
   shell: |
-   php /usr/share/tine20/setup.php -c /etc/tine20 --install all -- adminLoginName={{ tine20_admin_name }} adminPassword={{ tine20_admin_passwd }} acceptedTermsVersion=1000 adminEmailAddress={{ tine20_admin_name }}@{{ emaildomain }} imap=host:{{ tine20_mailhost }},port:143,useSystemAccount:1,domain:{{ domain }},ssl:none,useEmailAsUsername:0,backend:dovecot_imap,dovecot_host:{{ dbhost }},dovecot_dbname:dovecot,dovecot_username:{{ mailserver_db_user_name }},dovecot_password:{{ mailserver_db_user_passwd }},dovecot_uid:{{ deliver_user_name }},dovecot_gid:{{ deliver_user_name }},dovecot_home:/var/spool/mail/%d/%n,dovecot_scheme:SSHA512 smtp='{"active":true,"backend":"postfix","hostname":"{{ tine20_mailhost }}","port":25,"ssl":"none","auth":"none","primarydomain":"{{ domain }}","secondarydomains":"{{ allemaildomains | join(',') }}","username":"tine20@{{ domain }}","password":"tine20","from":"tine20@{{ domain }}","postfix":{"host":"{{ dbhost }}","dbname":"postfix","username":"{{ mailserver_db_user_name }}","password":"{{ mailserver_db_user_passwd }}"} }' sieve=hostname:{{ tine20_mailhost }},port:4190,ssl:none
+   php /usr/share/tine20/setup.php -c /etc/tine20 --install all -- adminLoginName={{ tine20_admin_name }} adminPassword={{ tine20_admin_passwd }} acceptedTermsVersion=1000 adminEmailAddress={{ tine20_admin_name }}@{{ emaildomain }} imap=host:{{ tine20_mailhost }},port:143,useSystemAccount:1,domain:{{ imapuserdomain }},ssl:none,useEmailAsUsername:0,backend:dovecot_imap,dovecot_host:{{ dbhost }},dovecot_dbname:dovecot,dovecot_username:{{ mailserver_db_user_name }},dovecot_password:{{ mailserver_db_user_passwd }},dovecot_uid:{{ deliver_user_name }},dovecot_gid:{{ deliver_user_name }},dovecot_home:/var/spool/mail/%d/%n,dovecot_scheme:SSHA512 smtp='{"active":true,"backend":"postfix","hostname":"{{ tine20_mailhost }}","port":25,"ssl":"none","auth":"none","primarydomain":"{{ imapuserdomain }}","secondarydomains":"{{ allemaildomains | join(',') }}","username":"tine20@{{ imapuserdomain }}","password":"tine20","from":"tine20@{{ domain }}","postfix":{"host":"{{ dbhost }}","dbname":"postfix","username":"{{ mailserver_db_user_name }}","password":"{{ mailserver_db_user_passwd }}"} }' sieve=hostname:{{ tine20_mailhost }},port:4190,ssl:none
   args:
     executable: "/bin/bash"
   become: True
@@ -85,7 +85,7 @@
 
 - name: Set imap Configuration of tine20 again
   shell: |
-      php /usr/share/tine20/setup.php -c /etc/tine20 --setconfig configkey='imap' configvalue='host:{{ tine20_mailhost }},port:143,useSystemAccount:1,domain:{{ domain }},ssl:none,useEmailAsUsername:0,backend:dovecot_imap,dovecot_host:{{ dbhost }},dovecot_dbname:dovecot,dovecot_username:{{ mailserver_db_user_name }},dovecot_password:{{ mailserver_db_user_passwd }},dovecot_uid:{{ deliver_user_name }},dovecot_gid:{{ deliver_user_name }},dovecot_home:/var/spool/mail/%d/%n,dovecot_scheme:SSHA512'
+      php /usr/share/tine20/setup.php -c /etc/tine20 --setconfig configkey='imap' configvalue='host:{{ tine20_mailhost }},port:143,useSystemAccount:1,domain:{{ imapuserdomain }},ssl:none,useEmailAsUsername:0,backend:dovecot_imap,dovecot_host:{{ dbhost }},dovecot_dbname:dovecot,dovecot_username:{{ mailserver_db_user_name }},dovecot_password:{{ mailserver_db_user_passwd }},dovecot_uid:{{ deliver_user_name }},dovecot_gid:{{ deliver_user_name }},dovecot_home:/var/spool/mail/%d/%n,dovecot_scheme:SSHA512'
   args:
     executable: "/bin/bash"
   become: True

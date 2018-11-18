@@ -43,6 +43,8 @@
   ini_file:
     dest: "/etc/cryptdomainmgr/domains.conf"
     section: "service:{{ item }}"
+    option: "dummy"
+    value: "Ansible"
     state: present
   with_items:
     - apache2
