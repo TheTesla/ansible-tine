@@ -4,5 +4,6 @@ SHELL=/bin/bash
 PATH=/usr/local/bin:/usr/local/sbin:/sbin:/usr/sbin:/bin:/usr/bin
 #M   S     T M W  User  Befehl
 #-----------------------------------------------------------------
-13   5     * * *  root    FILE=`mktemp` ; openssl dhparam 2048 -out $FILE && mv -f $FILE /etc/myssl/dh2048.pem
+13   5     * * *  root    FILE=`mktemp` ; openssl dhparam -out $FILE 2048 && mv -f $FILE /etc/myssl/dh2048.pem
+14   5     * * *  root    FILE=`mktemp` ; openssl dhparam -out $FILE 4096 && mv -f $FILE /etc/myssl/dh4096.pem
 
