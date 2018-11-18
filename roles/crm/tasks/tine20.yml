@@ -75,7 +75,7 @@
 
 - name: Set smtp Configuration of tine20 again
   shell: |
-      php /usr/share/tine20/setup.php -c /etc/tine20 --setconfig configkey='smtp' configvalue='{"active":true,"backend":"postfix","hostname":"{{ tine20_mailhost }}","port":25,"ssl":"none","auth":"none","primarydomain":"{{ domain }}","secondarydomains":"{{ allemaildomains | join(',') }}","username":"tine20@{{ domain }}","password":"tine20","from":"tine20@{{ domain }}","postfix":{"host":"{{ dbhost }}","dbname":"postfix","username":"{{ mailserver_db_user_name }}","password":"{{ mailserver_db_user_passwd }}"} }'
+      php /usr/share/tine20/setup.php -c /etc/tine20 --setconfig configkey='smtp' configvalue='{"active":true,"backend":"postfix","hostname":"{{ tine20_mailhost }}","port":25,"ssl":"none","auth":"none","primarydomain":"{{ imapuserdomain }}","secondarydomains":"{{ allemaildomains | join(',') }}","username":"tine20@{{ domain }}","password":"tine20","from":"tine20@{{ domain }}","postfix":{"host":"{{ dbhost }}","dbname":"postfix","username":"{{ mailserver_db_user_name }}","password":"{{ mailserver_db_user_passwd }}"} }'
   args:
     executable: "/bin/bash"
   become: True
