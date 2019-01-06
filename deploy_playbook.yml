@@ -21,6 +21,7 @@
     - common
     - database
     - webserver
+    - cms
     - mailserver
     - domain
     - mailinglist

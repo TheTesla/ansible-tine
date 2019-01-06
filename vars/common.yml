@@ -2,18 +2,19 @@
 
 hostname: "test242"
 tld: "entroserv.de"
+subdomain: "{{ tld }}"
 #tld: "smartrns.net"
 #tld: "fzs-wiki.de"
 #secondarytlds:
 #  - "entroserv.de"
 servername: "testserver"
 #servername: "crypt"
-domain: "{{ servername }}.{{ tld }}"
+domain: "{{ servername }}.{{ subdomain }}"
 tinedomains:
-  - "tine20.{{ tld }}"
+  - "tine20.{{ subdomain }}"
 rspamddomains:
-  - "rspamd.{{ tld }}"
-emaildomain: "{{ tld }}"
+  - "rspamd.{{ subdomain }}"
+emaildomain: "{{ subdomain }}"
 #emailmaps:
     #  - { emaildomain: "entroserv.de", mx: "{{ domain }}" }
     #  - { emaildomain: "entroserv.de", mx: "{{ domain }}" }
@@ -21,7 +22,7 @@ emaildomain: "{{ tld }}"
   
 
 #defaultlistmap: { emaildomain: "lists.smartrns.net", webdomain: "www.lists.smartrns.net", mx: '{{ domain }}' } 
-defaultlistmap: { emaildomain: "lists.{{ tld }}", webdomain: "www.lists.{{ tld }}", mx: '{{ domain }}' } 
+defaultlistmap: { emaildomain: "lists.{{ subdomain }}", webdomain: "www.lists.{{ subdomain }}", mx: '{{ subdomain }}' } 
 
 #listmaps:
     #- { emaildomain: "{{ tld }}", webdomain: "lists.{{ tld }}", mx: '{{ domain }}' }
@@ -29,6 +30,14 @@ defaultlistmap: { emaildomain: "lists.{{ tld }}", webdomain: "www.lists.{{ tld }
     #  - { emaildomain: "lists.entroserv.de", webdomain: "www.lists.entroserv.de", mx: '{{ domain }}' }
 
 imapuserdomain: "entro"
+
+webdomains: 
+  - "www.{{ subdomain }}"
+  - "{{ subdomain }}"
+
+grav_admin_user: "admin"
+
+grav_admin_email: "{{ tine20_admin_name}}@{{ emaildomain }}"
 
 tlsa: 'auto:3:1:1,auto:2:0:1'
 

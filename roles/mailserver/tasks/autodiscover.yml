@@ -1,0 +1,22 @@
+---
+
+- name: Create ActiveSync autodiscover directory
+  file:
+    path: /var/www/autodiscover/autodiscover/
+    state: directory
+
+- name: Template ActiveSync autodiscover file
+  template:
+    src: ../templates/var/www/autodiscover/autodiscover/autodiscover.php
+    dest: '/var/www/autodiscover/autodiscover/autodiscover.php'
+
+- name: Process autodiscover apache config template 
+  template:
+    src: "../templates/etc/apache2/sites-available/autodiscover.conf" 
+    dest: "/etc/apache2/sites-available/autodiscover.conf"
+
+- name: Enable ActiveSync autodiscover
+  shell: "a2ensite autodiscover.conf"
+  args:
+    executable: "/bin/bash"
+

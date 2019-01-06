@@ -22,3 +22,9 @@
     owner: root
     group: root
 
+  #- name: Immediatelly create dhparams
+  #  shell: "openssl dhparam -out /etc/myssl/dh2048.pem 512"
+  #
+  #- name: Immediatelly create dhparams
+  #  shell: "openssl dhparam -out /etc/myssl/dh4096.pem 512"
+

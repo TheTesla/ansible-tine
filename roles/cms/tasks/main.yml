@@ -1,0 +1,85 @@
+---
+
+- name: Download Grav
+  unarchive:
+    src: https://getgrav.org/download/core/grav-admin/latest
+    dest: /var/www/
+    owner: www-data
+    group: www-data
+    remote_src: True
+  register: gravinst
+
+- name: Install php-curl
+  apt:
+    name: php-curl
+    state: latest
+
+- name: Activate mailman in apache2
+  shell: "a2ensite grav.conf"
+  args:
+    executable: "/bin/bash"
+
+- name: Create Grav Admin
+  shell: "bin/plugin login newuser -u {{ grav_admin_user }} -p {{ grav_admin_passwd }} -e {{ grav_admin_email }} -P b -N Administrator -t Admin, -s enabled"
+  args:
+    chdir: "/var/www/grav-admin/"
+
+- name: Install addons
+  shell: "bin/gpm install -y {{ item }}"
+  args:
+    chdir: "/var/www/grav-admin/"
+  with_items:
+    - gantry5
+
+- name: Create session config
+  lineinfile:
+    dest: "/var/www/grav-admin/user/config/system.yaml"
+    regexp: "^session:"
+    line:   "session:"
+    state: present
+
+- name: Disable Grav session initialisation
+  lineinfile:
+    dest: "/var/www/grav-admin/user/config/system.yaml"
+    insertafter: "^session:"
+    regexp: "^  initialize:"
+    line:   "  initialize: false"
+    state: present
+
+- name: Transmit Grav session cookie only over TLS
+  lineinfile:
+    dest: "/var/www/grav-admin/user/config/system.yaml"
+    insertafter: "^session:"
+    regexp: "^  secure:"
+    line:   "  secure: true"
+    state: present
+
+- name: TLS required
+  blockinfile:
+    path: /etc/apache2/sites-available/grav.conf
+    create: True
+    marker: "# {mark} Ansible cms/grav https config"
+    content: | 
+      {% for item in webdomains %}
+      <VirtualHost *:80>
+        ServerName   {{ item }}
+        Redirect permanent / https://{{ item }}/
+      </VirtualHost>
+
+      <VirtualHost *:443>
+        SSLEngine on
+        SSLUseStapling on
+        SSLOpenSSLConfCmd DHParameters /etc/myssl/dh4096.pem
+        Header always set Strict-Transport-Security "max-age=63072000; includeSubdomains;"
+        SSLCertificateFile {{ certbaselocation }}/{{ item }}/fullchain.pem
+        SSLCertificateKeyFile {{ certbaselocation }}/{{ item }}/privkey.pem
+        DocumentRoot /var/www/grav-admin
+        ServerName   {{ item }}
+        <Directory /var/www/grav-admin/>
+          AllowOverride All
+        </Directory>
+      </VirtualHost>
+      {% endfor %}
+  notify:
+    - Restart apache2
+

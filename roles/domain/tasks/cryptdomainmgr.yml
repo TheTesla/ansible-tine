@@ -39,6 +39,11 @@
     value: "{{ item.value }}"
   with_dict: { user: '{{ inwxlogin }}', passwd: '{{ inwxpasswd }}' }
 
+- name: Delet old domain config
+  file: 
+    dest: "/etc/cryptdomainmgr/domains.conf"
+    state: absent
+
 - name: Set service configuration
   ini_file:
     dest: "/etc/cryptdomainmgr/domains.conf"
@@ -52,10 +57,26 @@
     - dovecot
     - rspamd
   
+- name: Set dhparam configuration - 4096 Bits
+  ini_file:
+    dest: "/etc/cryptdomainmgr/domains.conf"
+    section: "dhparam:dh4096"
+    option: "{{ item.key }}"
+    value: "{{ item.value }}"
+  with_dict: { handler: 'openssl', keysize: '4096', filename: '/etc/myssl/dh4096.pem' }
+ 
+- name: Set dhparam configuration - 2048 Bits
+  ini_file:
+    dest: "/etc/cryptdomainmgr/domains.conf"
+    section: "dhparam:dh2048"
+    option: "{{ item.key }}"
+    value: "{{ item.value }}"
+  with_dict: { handler: 'openssl', keysize: '2048', filename: '/etc/myssl/dh2048.pem' }
+ 
 - name: Set cert base configuration
   ini_file:
     dest: "/etc/cryptdomainmgr/domains.conf"
-    section: "cert:maincert"
+    section: "cert"
     option: "{{ item.key }}"
     value: "{{ item.value }}"
   with_dict: { handler: 'dehydrated', keysize: '4096', certname: 'fullchain.pem' }
@@ -63,23 +84,30 @@
 - name: Set letsencrypt account e-mail
   ini_file:
     dest: "/etc/cryptdomainmgr/domains.conf"
-    section: "cert:maincert"
+    section: "cert"
     option: "email"
     value: "{{ certemail }}"
+
+- name: Set live path certs are copied into on rollover
+  ini_file:
+    dest: "/etc/cryptdomainmgr/domains.conf"
+    section: "cert"
+    option: "destination"
+    value: "{{ certbaselocation }}"
 
 - name: Set letsencrypt extra arguments
   ini_file:
     dest: "/etc/cryptdomainmgr/domains.conf"
     section: "cert:maincert"
     option: "extraflags"
-    value: "{{ certextra }}"
+    value: "{{ ( certocsp + certextra ) | join(', ') }}"
 
-- name: Set live path certs are copied into on rollover
+- name: Set letsencrypt extra arguments, no ocsp
   ini_file:
     dest: "/etc/cryptdomainmgr/domains.conf"
-    section: "cert:maincert"
-    option: "destination"
-    value: "{{ certbaselocation }}"
+    section: "cert:noocspcert"
+    option: "extraflags"
+    value: "{{ certextra | join(', ') }}"
 
 - name: Set dkim configuration
   ini_file:
@@ -111,15 +139,47 @@
     - [{key: 'ip4', value: 'auto'}, {key: 'ip6', value: 'auto'}, {key: 'tlsa.tcp', value: '{{ tlsa }}'}, {key: 'cert', value: 'maincert'}, {key: 'caa', value: 'auto'}]
     - "{{ alldomains }}"
     
-- name: Set domain configurations for email autoconfig
+- name: Set domain configurations, no ocsp
   ini_file:
     dest: "/etc/cryptdomainmgr/domains.conf"
-    section: "domain:autoconfig.{{ item[1] }}"
+    section: "domain:{{ domain }}"
+    option: "cert"
+    value: "noocspcert"
+    
+- name: Set domain configurations for email autoconfig and autodiscover
+  ini_file:
+    dest: "/etc/cryptdomainmgr/domains.conf"
+    section: "domain:{{ item[1] }}.{{ item[2] }}"
     option: "{{ item[0].key }}"
     value: "{{ item[0].value }}"
   with_nested:
     - [{key: 'ip4', value: 'auto'}, {key: 'ip6', value: 'auto'}, {key: 'tlsa.tcp', value: '{{ tlsa }}'}, {key: 'cert', value: 'maincert'}, {key: 'caa', value: 'auto'}]
+    - ['autoconfig', 'autodiscover']
     - "{{ autoconfigdomains }}"
+
+- name: Set srv email imap autoconfig RFC6186
+  ini_file:
+    dest: "/etc/cryptdomainmgr/domains.conf"
+    section: "domain:{{ item }}"
+    option: "srv.imap.tcp"
+    value: "{{ domain }}:10:10:143"
+  with_items: "{{ autoconfigdomains }}"
+
+- name: Set srv email smtp autoconfig RFC6186
+  ini_file:
+    dest: "/etc/cryptdomainmgr/domains.conf"
+    section: "domain:{{ item.mx }}"
+    option: "srv.submission.tcp"
+    value: "{{ domain }}:10:10:587"
+  with_items: "{{ allmaps }}"
+
+- name: Set srv email autodiscover
+  ini_file:
+    dest: "/etc/cryptdomainmgr/domains.conf"
+    section: "domain:{{ item }}"
+    option: "srv.autodiscover.tcp"
+    value: "{{ item }}:10:10:443"
+  with_items: "{{ autoconfigdomains }}"
 
 - name: Set toplevel domain configurations - soa
   ini_file:
@@ -156,7 +216,7 @@
     option: "{{ item[0].key }}"
     value: "{{ item[0].value }}"
   with_nested:
-    - [{key: 'dmarc.p', value: 'quarantine'}, {key: 'dmarc.rua', value: 'mailto:admin@smartrns.net'}, {key: 'dmarc.ruf', value: 'mailto:admin@smartrns.net'}, {key: 'dmarc.adkim', value: 's'}, {key: 'dmarc.aspf', value: 'r'}, {key: 'dmarc.pct', value: '100'}]
+    - [{key: 'dmarc.p', value: 'quarantine'}, {key: 'dmarc.rua', value: 'mailto:{{ tine20_admin_name}}@{{ emaildomain }}'}, {key: 'dmarc.ruf', value: 'mailto:{{ tine20_admin_name}}@{{ emaildomain }}'}, {key: 'dmarc.adkim', value: 's'}, {key: 'dmarc.aspf', value: 'r'}, {key: 'dmarc.pct', value: '100'}]
     - "{{ allmaps }}"
 
 - name: Set e-mail domain configurations - dkim
