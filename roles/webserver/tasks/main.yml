@@ -13,49 +13,12 @@
 - name: Enable https
   apache2_module:
     state: present
-    name: ssl
+    name: "{{ item }}"
     ignore_configcheck: true
   ignore_errors: true 
-  #  notify:
-  #    - Restart apache2
-
-  #- name: Make SSL more secure - forward secrecy
-  #  lineinfile:
-  #    path: /etc/apache2/mods-enabled/ssl.conf
-  #    regexp: '(^|[# ]+)SSLCipherSuite'
-  #    #line: "SSLCipherSuite      ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256"
-  #    line: "SSLCipherSuite       AES256+EECDH:AES256+EDH:!aNULL"
-  #    #line: "SSLCipherSuite 'EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA:EECDH:EDH+AESGCM:EDH:!3DES:ECDH+AESGCM:ECDH+AES:ECDH:AES:HIGH:MEDIUM:!RC4:!CAMELLIA:!SEED:!aNULL:!MD5:!eNULL:!LOW:!EXP:!DSS:!PSK:!SRP'"
-  #
-  #- name: Make SSL more secure - disable old protocols
-  #  lineinfile:
-  #    path: /etc/apache2/mods-enabled/ssl.conf
-  #    regexp: 'SSLProtocol'
-  #    line: "SSLProtocol all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1" # +TLSv1.3"
-  #
-  #- name: Make SSL more secure - enable stapling
-  #  lineinfile:
-  #    path: /etc/apache2/mods-enabled/ssl.conf
-  #    regexp: 'SSLStaplingCache'
-  #    line: "SSLStaplingCache shmcb:/var/lib/apache2/ssl_stapling(32768)"
-  #
-  #- name: Make SSL more secure - dhparamsg
-  #  lineinfile:
-  #    path: /etc/apache2/mods-enabled/ssl.conf
-  #    regexp: 'SSLOpenSSLConfCmd[ ]DHParameters'
-  #    line: "SSLOpenSSLConfCmd DHParameters /etc/myssl/dh4096.pem"
-  #
-  #- name: Make SSL more secure - honor order of cipher
-  #  lineinfile:
-  #    path: /etc/apache2/mods-enabled/ssl.conf
-  #    regexp: 'SSLHonorCipherOrder'
-  #    line: "SSLHonorCipherOrder on"
-  #
-  #- name: Make SSL more secure - curves
-  #  lineinfile:
-  #    path: /etc/apache2/mods-enabled/ssl.conf
-  #    regexp: 'SSLOpenSSLConfCmd Curves'
-  #    line: "SSLOpenSSLConfCmd Curves secp521r1:secp384r1:prime256v1"
+  with_items:
+    - ssl
+    - headers
 
 - name: Make SSL more secure
   lineinfile:
