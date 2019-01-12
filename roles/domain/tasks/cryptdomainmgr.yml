@@ -12,6 +12,7 @@
     - python-dnspython
     - python-openssl
     - curl
+    - haveged
 
 - name: Install depencies via pip
   pip:

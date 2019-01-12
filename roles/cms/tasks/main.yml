@@ -14,11 +14,6 @@
     name: php-curl
     state: latest
 
-- name: Activate mailman in apache2
-  shell: "a2ensite grav.conf"
-  args:
-    executable: "/bin/bash"
-
 - name: Create Grav Admin
   shell: "bin/plugin login newuser -u {{ grav_admin_user }} -p {{ grav_admin_passwd }} -e {{ grav_admin_email }} -P b -N Administrator -t Admin, -s enabled"
   args:
@@ -30,6 +25,7 @@
     chdir: "/var/www/grav-admin/"
   with_items:
     - gantry5
+  ignore_errors: True
 
 - name: Create session config
   lineinfile:
@@ -82,4 +78,9 @@
       {% endfor %}
   notify:
     - Restart apache2
+
+- name: Activate mailman in apache2
+  shell: "a2ensite grav.conf"
+  args:
+    executable: "/bin/bash"
 

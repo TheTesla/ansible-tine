@@ -1,13 +1,13 @@
 ---
 
-hostname: "test242"
+hostname: "pserver"
 tld: "entroserv.de"
 subdomain: "{{ tld }}"
 #tld: "smartrns.net"
 #tld: "fzs-wiki.de"
 #secondarytlds:
 #  - "entroserv.de"
-servername: "testserver"
+servername: "pserver"
 #servername: "crypt"
 domain: "{{ servername }}.{{ subdomain }}"
 tinedomains:

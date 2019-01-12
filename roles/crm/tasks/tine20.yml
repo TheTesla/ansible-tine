@@ -25,6 +25,7 @@
     force: yes
   with_items:
     - apt-utils
+    - sudo
     - tine20
       #    - tine20-voipmanager
       #- tine20-events

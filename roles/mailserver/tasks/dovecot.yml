@@ -44,7 +44,7 @@
     login_password: '{{ mysql_root_passwd }}'
   ignore_errors: True
 
-- meta: flush_handlers
+  #- meta: flush_handlers
 
 
 - name: Set /var/mail deliver user (contains all mailboxes)

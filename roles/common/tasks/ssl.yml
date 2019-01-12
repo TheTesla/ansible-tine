@@ -14,17 +14,4 @@
     owner: root
     group: root
 
-- name: Copy cron file
-  copy:
-    dest: "/etc/cron.d/dhparam"
-    src: "../files/etc/cron.d/dhparam"
-    mode: 0644
-    owner: root
-    group: root
-
-  #- name: Immediatelly create dhparams
-  #  shell: "openssl dhparam -out /etc/myssl/dh2048.pem 512"
-  #
-  #- name: Immediatelly create dhparams
-  #  shell: "openssl dhparam -out /etc/myssl/dh4096.pem 512"
 
