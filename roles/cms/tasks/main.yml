@@ -9,15 +9,24 @@
     remote_src: True
   register: gravinst
 
-- name: Install php-curl
+- name: Install dependencies
   apt:
-    name: php-curl
+    name: "{{ item }}"
     state: latest
+  with_items:
+    - php-curl
+    - php-zip
+    - php-xml
+    - php-mbstring
+    - php-gd
+    - php-fpm
 
 - name: Create Grav Admin
   shell: "bin/plugin login newuser -u {{ grav_admin_user }} -p {{ grav_admin_passwd }} -e {{ grav_admin_email }} -P b -N Administrator -t Admin, -s enabled"
   args:
     chdir: "/var/www/grav-admin/"
+  become: True
+  become_user: "www-data"
 
 - name: Install addons
   shell: "bin/gpm install -y {{ item }}"
@@ -25,7 +34,10 @@
     chdir: "/var/www/grav-admin/"
   with_items:
     - gantry5
+    - git-sync
   ignore_errors: True
+  become: True
+  become_user: "www-data"
 
 - name: Create session config
   lineinfile:
@@ -33,6 +45,8 @@
     regexp: "^session:"
     line:   "session:"
     state: present
+  become: True
+  become_user: "www-data"
 
 - name: Disable Grav session initialisation
   lineinfile:
@@ -41,6 +55,8 @@
     regexp: "^  initialize:"
     line:   "  initialize: false"
     state: present
+  become: True
+  become_user: "www-data"
 
 - name: Transmit Grav session cookie only over TLS
   lineinfile:
@@ -49,6 +65,8 @@
     regexp: "^  secure:"
     line:   "  secure: true"
     state: present
+  become: True
+  become_user: "www-data"
 
 - name: TLS required
   blockinfile:
