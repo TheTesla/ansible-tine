@@ -27,7 +27,7 @@
     - apt-utils
     - sudo
     - tine20
-      #    - tine20-voipmanager
+      #- tine20-voipmanager
       #- tine20-events
       #- tine20-courses
       #- tine20-phone

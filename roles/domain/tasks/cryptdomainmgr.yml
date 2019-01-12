@@ -25,13 +25,6 @@
     - pycurl
     - cryptdomainmgr
 
-  #- name: Clone cryptdomainmgr recursively
-  #  git:
-  #    repo: "https://github.com/TheTesla/cryptdomainmgr.git"
-  #    dest: "/root/cryptdomainmgr" 
-  #    recursive: yes
-  #    force: yes
-
 - name: Set inwx login
   ini_file:
     dest: "/etc/cryptdomainmgr/inwxcred.conf"
@@ -116,7 +109,6 @@
     section: "dkim:maindkim"
     option: "{{ item.key }}"
     value: "{{ item.value }}"
-  #with_dict: { handler: 'rspamd', signingConfTemplateFile: '/root/cryptdomainmgr/dkim_signing_template.conf', signingConfTemporaryFile: '/etc/rspamd/dkim_signing_new.conf', signingConfDestinationFile: '/etc/rspamd/local.d/dkim_signing.conf' }
   with_dict: { handler: 'rspamd', signingConfTemporaryFile: '/etc/rspamd/dkim_signing_new.conf', signingConfDestinationFile: '/etc/rspamd/local.d/dkim_signing.conf' }
 
 
@@ -200,15 +192,6 @@
     value: "{{ item.mx }}:10"
   with_items:
     - "{{ allmaps }}"
-
-  #- name: Set e-mail domain configurations - tlsa
-  #  ini_file:
-  #    dest: "/root/domains.conf"
-  #    section: "domain:{{ item.emaildomain }}"
-  #    option: "tlsa"
-  #    value: "{{ tlsa }}"
-  #  with_items:
-  #    - "{{ allmaps }}"
 
 - name: Set e-mail domain configurations - dmarc
   ini_file:
