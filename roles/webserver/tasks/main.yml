@@ -10,7 +10,7 @@
     - libapache2-mod-php
     - php-mysql
 
-- name: Enable https
+- name: Enable some modules
   apache2_module:
     state: present
     name: "{{ item }}"
@@ -19,6 +19,7 @@
   with_items:
     - ssl
     - headers
+    - rewrite
 
 - name: Make SSL more secure
   lineinfile:

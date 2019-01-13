@@ -37,7 +37,7 @@ webdomains:
 
 grav_admin_user: "admin"
 
-grav_admin_email: "{{ tine20_admin_name}}@{{ emaildomain }}"
+grav_admin_email: "{{ tine20_admin_name }}@{{ emaildomain }}"
 
 tlsa: 'auto:3:1:1,auto:2:0:1'
 

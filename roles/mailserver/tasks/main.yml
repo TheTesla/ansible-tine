@@ -7,6 +7,8 @@
 
 - include: autoconfig.yml
 
+- include: autodiscover.yml
+
 - include: rspamd.yml
 
 - include: postfix.yml

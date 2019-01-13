@@ -16,7 +16,7 @@
     dest: "/etc/apache2/sites-available/autodiscover.conf"
 
 - name: Enable ActiveSync autodiscover
-  shell: "a2ensite autodiscover.conf"
+  shell: "a2ensite autodiscover"
   args:
     executable: "/bin/bash"
 
