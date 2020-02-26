@@ -15,15 +15,14 @@
     vtype: password
 
 - name: Install mysql and libs
-  apt:
-    name: "{{ item }}"
+  package:
+    name:
+      - mysql-server
+      - mysql-client
+      - mysql-utilities
+      - libdbi-perl
+      - libdbd-mysql-perl
+      - python-mysqldb
     state: latest
-  with_items:
-    - mysql-server
-    - mysql-client
-    - mysql-utilities
-    - libdbi-perl
-    - libdbd-mysql-perl
-    - python-mysqldb
 
 

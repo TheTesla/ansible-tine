@@ -2,28 +2,26 @@
 
 - name: Install dependencies via apt
   apt:
-    name: '{{ item }}'
+    name:
+      - libcurl4-openssl-dev
+      - libssl-dev
+      - python-pip
+      - python-dnspython
+      - python-openssl
+      - curl
+      - haveged
     state: latest
     update_cache: True
-  with_items:
-    - libcurl4-openssl-dev
-    - libssl-dev
-    - python-pip
-    - python-dnspython
-    - python-openssl
-    - curl
-    - haveged
 
 - name: Install depencies via pip
   pip:
-    name: "{{ item }}"
+    name:
+      - jinja2
+      - configparser
+      - parse
+      - pycurl
+      - cryptdomainmgr
     state: latest
-  with_items:
-    - jinja2
-    - configparser
-    - parse
-    - pycurl
-    - cryptdomainmgr
 
 - name: Set inwx login
   ini_file:

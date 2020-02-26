@@ -1,7 +1,7 @@
 ---
 
 hostname: "pserver"
-tld: "entroserv.de"
+tld: "bahn.cf"
 subdomain: "{{ tld }}"
 #tld: "smartrns.net"
 #tld: "fzs-wiki.de"

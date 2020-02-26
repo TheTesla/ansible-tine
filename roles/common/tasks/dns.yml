@@ -2,12 +2,11 @@
 
 
 - name: Install unbound
-  apt:
-    name: "{{ item }}"
+  package:
+    name:
+      - unbound
+      - dnsutils
     state: latest
-  with_items:
-    - unbound
-    - dnsutils
 
 - name: Copy unbound config
   copy:

@@ -10,16 +10,15 @@
   register: gravinst
 
 - name: Install dependencies
-  apt:
-    name: "{{ item }}"
+  package:
+    name:
+      - php-curl
+      - php-zip
+      - php-xml
+      - php-mbstring
+      - php-gd
+      - php-fpm
     state: latest
-  with_items:
-    - php-curl
-    - php-zip
-    - php-xml
-    - php-mbstring
-    - php-gd
-    - php-fpm
 
 - name: Create Grav Admin
   shell: "bin/plugin login newuser -u {{ grav_admin_user }} -p {{ grav_admin_passwd }} -e {{ grav_admin_email }} -P b -N Administrator -t Admin, -s enabled"

@@ -12,6 +12,12 @@
     id: 8825FD82
     state: present
 
+    #- name: Add php7.1 repo
+    #  apt_repository:
+    #    repo: "ppa:ondrej/php"
+    #    state: present
+    #    update_cache: yes
+
 - name: Add tine20 repo
   apt_repository:
     repo: "deb https://packages.tine20.org/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} stable"
@@ -19,20 +25,13 @@
     update_cache: yes
 
 - name: Get tine20
-  apt:
-    name: "{{ item }}"
+  package:
+    name:
+      - apt-utils
+      - sudo
+      - tine20
     state: latest
-    force: yes
-  with_items:
-    - apt-utils
-    - sudo
-    - tine20
-      #- tine20-voipmanager
-      #- tine20-events
-      #- tine20-courses
-      #- tine20-phone
-      #- tine20-projects
-      #- tine20-worker
+    #force: yes
 
 - name: Enable https
   apache2_module:

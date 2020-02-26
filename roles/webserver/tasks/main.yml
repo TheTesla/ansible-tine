@@ -1,14 +1,13 @@
 ---
 
 - name: Install apache2 webserver
-  apt:
-    name: "{{ item }}"
+  package:
+    name: 
+      - apache2
+      - php
+      - libapache2-mod-php
+      - php-mysql
     state: latest
-  with_items:
-    - apache2
-    - php
-    - libapache2-mod-php
-    - php-mysql
 
 - name: Enable some modules
   apache2_module:

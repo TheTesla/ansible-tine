@@ -12,17 +12,16 @@
   #    repo: "ppa:pdoes/dovecot"
 
 - name: Install dovecot and components
-  apt:
-    name: "{{ item }}"
+  package:
+    name:
+      - dovecot-core
+      - dovecot-imapd
+      - dovecot-mysql
+      - dovecot-lmtpd
+      - dovecot-pop3d
+      - dovecot-sieve
+      - dovecot-managesieved
     state: latest
-  with_items:
-    - dovecot-core
-    - dovecot-imapd
-    - dovecot-mysql
-    - dovecot-lmtpd
-    - dovecot-pop3d
-    - dovecot-sieve
-    - dovecot-managesieved
 
 - name: Copy dovecot SQL file
   copy:

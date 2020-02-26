@@ -17,10 +17,9 @@
 
 - name: Install mailman
   apt:
-    name: "{{ item }}"
+    name:
+      - mailman
     state: latest
-  with_items:
-    - mailman
 
 - name: Create directories 
   file:

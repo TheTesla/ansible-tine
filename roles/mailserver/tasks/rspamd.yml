@@ -17,12 +17,11 @@
 
 - name: Install rspamd and redis
   apt:
-    name: "{{ item }}"
+    name:
+      - rspamd
+      - redis-server
     update_cache: True
     state: latest 
-  with_items:
-    - rspamd
-    - redis-server
 
 - name: Create rspamd password hash
   shell: "rspamadm pw -p {{ rspamd_pw }}"

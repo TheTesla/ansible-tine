@@ -15,12 +15,11 @@
     vtype: select
 
 - name: Install postfix
-  apt:
-    name: "{{ item }}"
+  package:
+    name:
+      - postfix
+      - postfix-mysql
     state: latest
-  with_items:
-    - postfix
-    - postfix-mysql
 
 - name: Copy postfix SQL file
   copy:
