@@ -1,5 +1,11 @@
 ---
 
+- name: Add new apache2 repo to support TLSv1.3
+  apt_repository:
+    repo: "ppa:ondrej/apache2"
+    state: present
+    update_cache: yes
+
 - name: Install apache2 webserver
   package:
     name: 
@@ -19,6 +25,7 @@
     - ssl
     - headers
     - rewrite
+    - http2
 
 - name: Make SSL more secure
   lineinfile:
@@ -26,6 +33,6 @@
     regexp: '^[\s\#]*{{ item.key }}'
     line: "{{ item.key }} {{ item.value }}"
     insertbefore: "</IfModule>"
-  with_dict: { SSLOpenSSLConfCmd ECDHParameters: "Automatic", SSLOpenSSLConfCmd Curves: "secp521r1:secp384r1:prime256v1", SSLHonorCipherOrder: "on", SSLOpenSSLConfCmd DHParameters: "/etc/myssl/dh4096.pem", SSLStaplingCache: "shmcb:/var/lib/apache2/ssl_stapling(32768)", SSLProtocol: "all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1", SSLCipherSuite: "AES256+EECDH:AES256+EDH:!aNULL" }
+  with_dict: { SSLOpenSSLConfCmd ECDHParameters: "Automatic", SSLOpenSSLConfCmd Curves: "secp521r1:secp384r1:prime256v1", SSLHonorCipherOrder: "on", SSLOpenSSLConfCmd DHParameters: "/etc/myssl/dh4096.pem", SSLStaplingCache: "shmcb:/var/lib/apache2/ssl_stapling(32768)", SSLProtocol: "all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1", SSLCipherSuite: "TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:AES256+EECDH:AES256+EDH:!aNULL:!ECDHE-RSA-AES256-SHA384:!DHE-RSA-AES256-SHA256:!DHE-RSA-AES256-SHA:!ECDHE-RSA-AES256-SHA" }
 
 
